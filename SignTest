@@ -1,0 +1,61 @@
+import java.security.*;
+import java.util.Base64;
+import java.util.Enumeration;
+
+public class SignTest {
+
+    public static void main(String[] args) throws Exception {
+
+        Provider p = Security.getProvider("SunPKCS11")
+                .configure("pkcs11.cfg");
+
+        Security.addProvider(p);
+
+        KeyStore ks = KeyStore.getInstance("PKCS11", p);
+        ks.load(null, "1234".toCharArray());
+
+        System.out.println("KeyStore type: " + ks.getType());
+        System.out.println("KeyStore size: " + ks.size());
+
+        PrivateKey privateKey = null;
+
+        Enumeration<String> aliases = ks.aliases();
+
+        while (aliases.hasMoreElements()) {
+            String alias = aliases.nextElement();
+
+            System.out.println("Checking alias: " + alias);
+
+            if (ks.isKeyEntry(alias)) {
+                try {
+                    Key key = ks.getKey(alias, null);
+
+                    if (key instanceof PrivateKey) {
+                        privateKey = (PrivateKey) key;
+                        System.out.println("FOUND PRIVATE KEY: " + alias);
+                        break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Skip alias (no access): " + alias);
+                }
+            }
+        }
+
+        if (privateKey == null) {
+            System.out.println("\n❌ STILL NO KEY FOUND");
+            System.out.println("=> Your Java PKCS11 KeyStore does not expose token objects");
+            System.out.println("=> We switch to raw PKCS11 signing (next step)");
+            return;
+        }
+
+        Signature sig = Signature.getInstance("SHA256withRSA", p);
+
+        sig.initSign(privateKey);
+        sig.update("Hello SoftHSM".getBytes());
+
+        byte[] signature = sig.sign();
+
+        System.out.println("\nSIGNATURE:");
+        System.out.println(Base64.getEncoder().encodeToString(signature));
+    }
+}

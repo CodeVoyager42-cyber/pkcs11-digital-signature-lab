@@ -1,0 +1,15 @@
+# HSM / SoftHSM data
+softhsm-tokens/
+*.so
+*.db
+
+# Java
+*.class
+
+# config with secrets
+pkcs11.cfg
+java.security
+
+# IDE
+.idea/
+*.iml

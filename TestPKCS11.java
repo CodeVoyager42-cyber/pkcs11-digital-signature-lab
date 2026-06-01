@@ -1,0 +1,24 @@
+import java.security.KeyStore;
+import java.security.Provider;
+import java.security.Security;
+
+public class TestPKCS11 {
+
+    public static void main(String[] args) throws Exception {
+
+        Provider p = Security.getProvider("SunPKCS11");
+        p = p.configure("pkcs11.cfg");
+
+        Security.addProvider(p);
+
+        KeyStore ks = KeyStore.getInstance("PKCS11", p);
+        ks.load(null, "1234".toCharArray());
+
+        System.out.println("=== KEYS ===");
+
+        var aliases = ks.aliases();
+        while (aliases.hasMoreElements()) {
+            System.out.println(aliases.nextElement());
+        }
+    }
+}
