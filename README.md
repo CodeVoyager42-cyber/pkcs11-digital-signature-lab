@@ -38,7 +38,7 @@ Java Application → SunPKCS11 Provider → PKCS#11 Library (libsofthsm2.so) →
 
 ```bash
 sudo apt update
-sudo apt install softhsm2 openjdk-17-jdk# PKCS#11 Digital Signature Lab (Java + SoftHSM)
+sudo apt install softhsm2 openjdk-17-jdk (Java + SoftHSM)
 
 ## 📌 Overview
 
