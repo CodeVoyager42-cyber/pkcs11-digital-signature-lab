@@ -101,7 +101,7 @@ java SignDirect
 
 ## Output
 Provider loaded: SunPKCS11-SoftHSM
-Login successful
+Login successful: "long Base64 string is the digital signature".
 
 ## 🔄 What Happens Internally
 Java loads SunPKCS11 provider
