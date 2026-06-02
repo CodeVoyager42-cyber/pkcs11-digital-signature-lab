@@ -12,7 +12,7 @@ This project helps understand how real-world systems (banks, e-signature platfor
 
 ## 🧠 Architecture
 
-Java Application → SunPKCS11 Provider → PKCS#11 Library (libsofthsm2.so) → SoftHSM Token → Private Key → Digital Signature
+Java Application → SunPKCS11 Provider → PKCS#11 Library (libsofthsm2.so) → SoftHSM Token → Private Key (never leave the token) → Digital Signature
 
 ---
 
@@ -89,7 +89,7 @@ User PIN
 softhsm2-util --show-slots
 
 ## ⚙️ Configuration File
-pkcs11.cfg
+nano pkcs11.cfg 
 name = SoftHSM
 library = /usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so
 slotListIndex = 0
